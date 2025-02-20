@@ -15,8 +15,6 @@ import os
 print('imports loaded')
 
 relative_filepath = 'NHSdata.xlsx'
-orange = (247, 110, 0)
-deep_red = (242, 79, 79)
 filepath = os.getcwd() + '\\' + relative_filepath
 column_definitions = {'Year': pd.Int64Dtype(),
                       'OADR (Old Age Dependancy Ratio)': float,
@@ -84,17 +82,6 @@ print('Completed Regression')
 tab_data =  dcc.Tab(label='Data', children=[
     dash_table.DataTable(data.to_dict('records'), columns=[{"name": i, "id": i} for i in data.columns], id='data-table'),
     ])
-
-"""@callback(
-    Output('data-table', 'columns'),
-    Input('data-year-slider', 'value'),
-    Input('data-column-dropdown', 'value')) #State('data-table', 'columns'))
-def update_data_table(year, selected_column, columns):
-    if selected_column == 'None': columns = [{"name": i, "id": i} for i in data.columns] # show all
-    else: columns = ['Year', selected_column]
-    table = dash_table.DataTable(data.to_dict('records'), columns)
-    return table
-"""
 
 ###
 # Page - COMPARISON
@@ -253,12 +240,14 @@ def update_models_graph(year, measure1, measure2, measure3):
 
 app = Dash()
 
+title = html.H1(children='Dash Demo')#, style={'textAlign':'left'})
+tabs = dcc.Tabs([tab_comparison, tab_spc, tab_regression, tab_models, tab_data])
+
 app.layout = [
-    html.Div(children='', id='vertical-line-1', style={'width':'4 px', 'height':'100%', 'top':'0', 'left':'10', 'background-color':f'rgb{deep_red}'}),
-    html.Div(id='vertical-line-2', style={'width':'12 px', 'height':'100%', 'top':'0', 'left':'20', 'background-color':f'rgb{orange}'}),
-    html.Div(id='horizontal-line-1', style={'width':'100%', 'height':'4 px', 'top':'10', 'left':'0', 'background-color':f'rgb{deep_red}'}),
-    html.H1(children='Dash Demo', id='Header', style={'textAlign':'left'}),
-    dcc.Tabs([tab_comparison, tab_spc, tab_regression, tab_models, tab_data]),
+    html.Div(children='', id='top_bar'),
+    html.Div(children='', id='left_bar'),
+    html.Div(children='', id='left_bar_wide'),
+    html.Div(children=[title, tabs], id='main'),
     ]
 
 if __name__ == '__main__':
